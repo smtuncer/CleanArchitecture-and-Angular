@@ -88,8 +88,4 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
     {
         _entity.UpdateRange(entities);
     }
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _context.SaveChangesAsync(cancellationToken);
-    }
 }

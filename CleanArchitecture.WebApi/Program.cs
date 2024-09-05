@@ -12,22 +12,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string connectionString = builder.Configuration.GetConnectionString("SqlServer");
+builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IBlogCategoryService, BlogCategoryService>();
 builder.Services.AddScoped<IBlogCategoryRepository, BlogCategoryRepository>();
-
 builder.Services.AddScoped<IGenericRepository<BlogCategory>, GenericRepository<BlogCategory, AppDbContext>>();
-builder.Services.AddScoped<IGenericRepository<Blog>, GenericRepository<Blog, AppDbContext>>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.AssemblyRefence).Assembly);
-
-
-string connectionString = builder.Configuration.GetConnectionString("SqlServer");
-builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
+builder.Services.AddAutoMapper(typeof(CleanArchitecture.Application.AssemblyReferance).Assembly);
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CleanArchitecture.Presentation.AssemblyReferance).Assembly);

@@ -4,19 +4,17 @@ using CleanArchitecture.Application.Features.BlogCategoryFeatures.Queries.GetAll
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
-using CleanArchitecture.Persistance.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CleanArchitecture.Persistance.Services;
 public sealed class BlogCategoryService : IBlogCategoryService
 {
-    private readonly AppDbContext _context;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public BlogCategoryService(AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
+    public BlogCategoryService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _context = context;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -30,8 +28,8 @@ public sealed class BlogCategoryService : IBlogCategoryService
 
     public async Task<IList<BlogCategory>> GetAllAsync(GetAllBlogCategoryQuery request, CancellationToken cancellationToken)
     {
-        var data = await _unitOfWork.Repository<BlogCategory>().GetAll().ToListAsync(cancellationToken);
-        IList<BlogCategory> blogCategories = _mapper.Map<IList<BlogCategory>>(data);
+        IList<BlogCategory> blogCategories = await _unitOfWork.Repository<BlogCategory>().GetAll().ToListAsync(cancellationToken);
+
         return blogCategories;
     }
 }

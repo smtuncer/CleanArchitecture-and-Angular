@@ -3,13 +3,13 @@ using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.Creat
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Queries.GetAllBlogCategory;
 using CleanArchitecture.Domain.Entities;
 
-namespace CleanArchitecture.Persistance.Mappings;
+namespace CleanArchitecture.Application.Mappings;
 
 public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
         CreateMap<CreateBlogCategoryCommand, BlogCategory>().ReverseMap();
-        CreateMap<GetAllBlogCategoryQuery, BlogCategory>().ReverseMap();
+        CreateMap<GetAllBlogCategoryQuery, IList<BlogCategory>>().ReverseMap();
     }
 }
