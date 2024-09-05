@@ -7,7 +7,7 @@ public abstract class Entity
         CreatedDate = DateTime.Now;
         IsDeleted = false;
     }
-    public required string Id { get; set; }
+    public string Id { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }
     public bool IsDeleted { get; set; }

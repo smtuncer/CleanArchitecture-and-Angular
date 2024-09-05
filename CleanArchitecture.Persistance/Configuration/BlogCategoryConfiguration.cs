@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using CleanArchitecture.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using CleanArchitecture.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CleanArchitecture.Persistance.Configuration;
 

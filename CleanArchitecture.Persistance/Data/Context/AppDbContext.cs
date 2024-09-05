@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Persistance.Context;
+namespace CleanArchitecture.Persistance.Data.Context;
 public sealed class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions options) : base(options) { }
