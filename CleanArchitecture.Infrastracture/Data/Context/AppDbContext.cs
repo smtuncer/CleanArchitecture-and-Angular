@@ -3,8 +3,9 @@ using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
- 
-namespace CleanArchitecture.Infrastructure.Persistance.Data.Context;
+using System.Reflection;
+
+namespace CleanArchitecture.Infrastracture.Data.Context;
 
 public sealed class AppDbContext : IdentityDbContext<
     User,
@@ -25,7 +26,7 @@ public sealed class AppDbContext : IdentityDbContext<
         modelBuilder.Ignore<IdentityRoleClaim<Guid>>();
         modelBuilder.Ignore<IdentityUserToken<Guid>>();
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyRefence).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
 

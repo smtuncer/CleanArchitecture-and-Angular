@@ -1,21 +1,33 @@
-﻿using CleanArchitecture.Application.Services;
-using CleanArchitecture.Application.Dtos;
+﻿using AutoMapper;
+using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using TS.Result;
 
 namespace CleanArchitecture.Application.Features.AuthFeatures.Commands.Register;
 
-public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, MessageResponse>
+public sealed class RegisterCommandHandler(
+    UserManager<User> userManager,
+    IMapper mapper,
+    IMailService mailService) : IRequestHandler<RegisterCommand, Result<string>>
 {
-    private readonly IAuthService _authService;
 
-    public RegisterCommandHandler(IAuthService authService)
+    public async Task<Result<string>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        _authService = authService;
-    }
+        User user = mapper.Map<User>(request);
+        IdentityResult result = await userManager.CreateAsync(user, request.Password);
+        if (!result.Succeeded)
+        {
+            throw new Exception(result.Errors.First().Description);
+        }
 
-    public async Task<MessageResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
-    {
-        await _authService.RegisterAsync(request, cancellationToken);
-        return new("Kullanıcı kaydı başarıyla tamamlandı!");
+        List<string> emails = new();
+        emails.Add(request.Email);
+        string body = "";
+
+        await mailService.SendMailAsync(emails, "Mail Onayı", body);
+
+        return Result<string>.Succeed("Kullanıcı kaydı başarıyla tamamlandı");
     }
 }

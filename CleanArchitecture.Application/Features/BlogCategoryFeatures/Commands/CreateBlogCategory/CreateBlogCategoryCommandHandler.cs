@@ -1,20 +1,33 @@
-﻿using CleanArchitecture.Application.Dtos;
+﻿using AutoMapper;
 using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
+using TS.Result;
 
 namespace CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.CreateBlogCategory;
-public sealed class CreateBlogCategoryCommandHandler : IRequestHandler<CreateBlogCategoryCommand, MessageResponse>
+public sealed class CreateBlogCategoryCommandHandler(
+    IUnitOfWork unitOfWork,
+    IMapper mapper) : IRequestHandler<CreateBlogCategoryCommand, Result<string>>
 {
-    private readonly IBlogCategoryService _blogCategoryService;
 
-    public CreateBlogCategoryCommandHandler(IBlogCategoryService blogCategoryService)
+    public async Task<Result<string>> Handle(CreateBlogCategoryCommand request, CancellationToken cancellationToken)
     {
-        _blogCategoryService = blogCategoryService;
-    }
+        BlogCategory blogCategory = mapper.Map<BlogCategory>(request);
+        await using var transaction = await unitOfWork.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            await unitOfWork.Repository<BlogCategory>().AddAsync(blogCategory);
 
-    public async Task<MessageResponse> Handle(CreateBlogCategoryCommand request, CancellationToken cancellationToken)
-    {
-        await _blogCategoryService.CreateAsync(request, cancellationToken);
-        return new("Blog Kategorisi başarıyla kaydedildi!");
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await unitOfWork.CommitTransactionAsync(cancellationToken);
+
+            return Result<string>.Succeed("Kategori eklendi");
+        }
+        catch (Exception)
+        {
+            await unitOfWork.RollbackTransactionAsync(cancellationToken);
+            throw;
+        }
     }
 }

@@ -1,21 +1,36 @@
 ﻿using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using TS.Result;
 
 namespace CleanArchitecture.Application.Features.AuthFeatures.Commands.Login;
-
-public sealed class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
+internal sealed class LoginCommandHandler(
+    UserManager<User> userManager,
+    IJwtProvider jwtProvider) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
 {
-    private readonly IAuthService _authService;
-
-    public LoginCommandHandler(IAuthService authService)
+    public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        _authService = authService;
-    }
+        User? appUser =
+            await userManager.Users.FirstOrDefaultAsync(p =>
+            p.UserName == request.UserNameOrEmail ||
+            p.Email == request.UserNameOrEmail, cancellationToken);
 
-    public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
-    {
-        LoginCommandResponse response = await _authService.LoginAsync(request, cancellationToken);
+        if (appUser is null)
+        {
+            return Result<LoginCommandResponse>.Failure("Kullanıcı Bulunamadı");
+        }
 
-        return response;
+        bool isPasswordCorrect = await userManager.CheckPasswordAsync(appUser, request.Password);
+        if (!isPasswordCorrect)
+        {
+            return Result<LoginCommandResponse>.Failure("Parola Yanlış");
+        }
+
+        string token = await jwtProvider.CreateTokenAsync(appUser);
+        LoginCommandResponse response = new(token);
+
+        return Result<LoginCommandResponse>.Succeed(response);
     }
 }

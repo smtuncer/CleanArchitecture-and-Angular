@@ -1,9 +1,11 @@
-﻿using CleanArchitecture.Domain.Repositories;
-using CleanArchitecture.Infrastructure.Persistance.Data.Context;
+﻿using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Repositories;
+using CleanArchitecture.Infrastracture.Data.Context;
+using CleanArchitecture.Infrastracture.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Collections.Concurrent;
 
-namespace CleanArchitecture.Infrastructure.Persistance.Repositories;
+namespace CleanArchitecture.Infrastracture.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {

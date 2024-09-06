@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Dtos;
+﻿namespace CleanArchitecture.Domain.Dtos;
 
 public class PaginationResult<TEntity>
 {

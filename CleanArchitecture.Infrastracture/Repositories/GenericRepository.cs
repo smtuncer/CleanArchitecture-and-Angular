@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace CleanArchitecture.Infrastructure.Persistance.Repositories;
+namespace CleanArchitecture.Infrastracture.Repositories;
 public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> where TEntity : class where TContext : DbContext
 {
     private readonly TContext _context;
@@ -15,12 +15,12 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
         _entity = _context.Set<TEntity>();
     }
 
-    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         await _entity.AddAsync(entity, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
 
-    public async Task AddRangeASync(ICollection<TEntity> entities, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task AddRangeASync(ICollection<TEntity> entities, CancellationToken cancellationToken = default)
     {
         await _entity.AddRangeAsync(entities, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
@@ -30,7 +30,7 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
         _entity.Remove(entity);
     }
 
-    public async Task DeleteByExpressionAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task DeleteByExpressionAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
     {
         TEntity entity = await _entity.Where(expression).AsNoTracking().FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(continueOnCapturedContext: false);
@@ -58,7 +58,7 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
         return _entity.Where(expression).AsNoTracking().FirstOrDefault();
     }
 
-    public async Task<TEntity> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<TEntity> GetByExpressionAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
     {
         return await _entity.Where(expression).AsNoTracking().FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(continueOnCapturedContext: false);
@@ -69,13 +69,13 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
         return _entity.AsNoTracking().FirstOrDefault();
     }
 
-    public async Task<TEntity> GetFirstAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<TEntity> GetFirstAsync(CancellationToken cancellationToken = default)
     {
         return await _entity.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
 
     // GetPagedAsync sayfalama sonucunu bir liste olarak döndürüyor
-    public async Task<List<TEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<List<TEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
         var query = _entity.AsQueryable();
 

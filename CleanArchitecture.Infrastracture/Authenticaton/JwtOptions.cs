@@ -1,5 +1,4 @@
-﻿namespace CleanArcihtecture.Infrastructure.Authenticaton;
-
+﻿
 public sealed class JwtOptions
 {
     public string Issuer { get; set; }

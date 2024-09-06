@@ -1,5 +1,5 @@
 ﻿using System.Net.Mail;
-namespace CleanArchitecture.Application.Dtos;
+namespace CleanArchitecture.Domain.Dtos;
 
 public sealed class SendEmailModel
 {

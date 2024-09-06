@@ -1,9 +1,8 @@
-﻿using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Domain.Repositories;
-using CleanArchitecture.Persistance.Data.Context;
+﻿using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Infrastracture.Data.Context;
 using CleanArchitecture.WebApi.Middeware;
 using FluentValidation;
-using System.Threading;
 
 namespace CleanArchitecture.WebApi.Middleware;
 

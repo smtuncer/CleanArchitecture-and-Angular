@@ -1,5 +1,5 @@
-﻿using CleanArchitecture.Application.Dtos;
-using CleanArchitecture.Application.Services;
+﻿using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Dtos;
 using System.Net;
 using System.Net.Mail;
 

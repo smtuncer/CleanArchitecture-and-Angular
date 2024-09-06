@@ -1,21 +1,31 @@
 ﻿using CleanArchitecture.Application.Features.AuthFeatures.Commands.Login;
 using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using TS.Result;
 
 namespace CleanArchitecture.Application.Features.AuthFeatures.Commands.CreateNewTokenByRefreshToken;
 
-public sealed class CreateNewTokenByRefreshTokenCommandHandler : IRequestHandler<CreateNewTokenByRefreshTokenCommand, LoginCommandResponse>
+public sealed class CreateNewTokenByRefreshTokenCommandHandler(
+    UserManager<User> userManager,
+    IJwtProvider jwtProvider) : IRequestHandler<CreateNewTokenByRefreshTokenCommand, Result<LoginCommandResponse>>
 {
-    private readonly IAuthService _authService;
 
-    public CreateNewTokenByRefreshTokenCommandHandler(IAuthService authService)
+    public async Task<Result<LoginCommandResponse>> Handle(CreateNewTokenByRefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        _authService = authService;
-    }
+        User user = await userManager.FindByIdAsync(request.UserId);
+        if (user == null) throw new Exception("Kullanıcı bulunamadı!");
 
-    public async Task<LoginCommandResponse> Handle(CreateNewTokenByRefreshTokenCommand request, CancellationToken cancellationToken)
-    {
-        LoginCommandResponse response = await _authService.CreateTokenByRefreshTokenAsync(request, cancellationToken);
-        return response;
+        if (user.RefreshToken != request.RefreshToken)
+            throw new Exception("Refresh Token geçerli değil!");
+
+        if (user.RefreshTokenExpires < DateTime.Now)
+            throw new Exception("Refresh Tokenun süresi dolmuş!");
+
+        string token = await jwtProvider.CreateTokenAsync(user);
+        LoginCommandResponse response = new(token);
+
+        return Result<LoginCommandResponse>.Succeed(response);
     }
 }

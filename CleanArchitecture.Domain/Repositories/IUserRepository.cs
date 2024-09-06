@@ -2,4 +2,4 @@
 
 namespace CleanArchitecture.Domain.Repositories;
 
-public interface IUserRoleRepository : IGenericRepository<UserRole> { }
+public interface IUserRepository : IGenericRepository<User> { }

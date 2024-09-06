@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchitecture.Infrastructure.Persistence.Configuration;
+namespace CleanArchitecture.Infrastracture.Configuration;
 
 public sealed class ErrorLogConfiguration : IEntityTypeConfiguration<ErrorLog>
 {

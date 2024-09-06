@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
- 
+
 namespace CleanArchitecture.WebApi.Abstraction;
 
+[Route("api/[controller]/[action]")]
 [ApiController]
-[Route("api/[controller]")]
 public abstract class ApiController : ControllerBase
 {
     public readonly IMediator _mediator;

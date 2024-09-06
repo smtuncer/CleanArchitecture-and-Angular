@@ -1,60 +1,66 @@
-﻿using CleanArchitecture.Application.Abstractions;
-using CleanArchitecture.Application.Features.AuthFeatures.Commands.Login;
+﻿using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
-namespace CleanArcihtecture.Infrastructure.Authenticaton;
+namespace CleanArchitecture.Infrastracture.Authenticaton;
 
-public sealed class JwtProvider : IJwtProvider
+internal sealed class JwtProvider(
+    IConfiguration configuration,
+    IUserRoleRepository userRoleRepository,
+    RoleManager<Role> roleManager) : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions;
-    private readonly UserManager<User> _userManager;
-    public JwtProvider(IOptions<JwtOptions> jwtOptions, UserManager<User> userManager)
+    public async Task<string> CreateTokenAsync(User user)
     {
-        _jwtOptions = jwtOptions.Value;
-        _userManager = userManager;
-    }
+        List<UserRole> userRoles = await userRoleRepository.GetWhere(p => p.UserId == user.Id).ToListAsync();
 
-    public async Task<LoginCommandResponse> CreateTokenAsync(User user)
-    {
-        var claims = new Claim[]
+        List<Role> roles = new();
+
+        foreach (var userRole in userRoles)
+        {
+            Role? role = await roleManager.Roles.Where(p => p.Id == userRole.RoleId).FirstOrDefaultAsync();
+            if (role is not null)
+            {
+                roles.Add(role);
+            }
+        }
+
+        List<string?> stringRoles = roles.Select(s => s.Name).ToList();
+
+        List<Claim> claims = new()
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-            new Claim("FullName",user.FullName)
+            new Claim(ClaimTypes.Name, user.FullName),
+            new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+            new Claim("UserName", user.UserName ?? string.Empty),
+            new Claim(ClaimTypes.Role, JsonSerializer.Serialize(stringRoles))
         };
 
-        DateTime expires = DateTime.Now.AddHours(1);
+        DateTime expires = DateTime.Now.AddDays(1);
 
-        JwtSecurityToken jwtSecurityToken = new(
-            issuer: _jwtOptions.Issuer,
-            audience: _jwtOptions.Audience,
+        SymmetricSecurityKey securityKey =
+            new(Encoding.UTF8.GetBytes(configuration.GetSection("Jwt:SecretKey").Value ?? ""));
+        SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha512);
+
+        JwtSecurityToken securityToken = new(
+            issuer: configuration.GetSection("Jwt:Issuer").Value,
+            audience: configuration.GetSection("Jwt:Audience").Value,
             claims: claims,
             notBefore: DateTime.Now,
             expires: expires,
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),SecurityAlgorithms.HmacSha256));
+            signingCredentials: signingCredentials);
 
-        string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        JwtSecurityTokenHandler handler = new();
 
-        string refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+        string token = handler.WriteToken(securityToken);
 
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpires = expires.AddMinutes(15);
-        await _userManager.UpdateAsync(user);
-
-        LoginCommandResponse response = new(
-            token,
-            refreshToken,
-            user.RefreshTokenExpires,
-            user.Id.ToString());
-
-        return response;
+        return token;
     }
 }
