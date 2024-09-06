@@ -7,7 +7,8 @@ using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Persistance.Services;
+namespace CleanArcihtecture.Infrastructure.Services;
+
 public sealed class BlogCategoryService : IBlogCategoryService
 {
     private readonly IUnitOfWork _unitOfWork;

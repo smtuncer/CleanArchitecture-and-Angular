@@ -2,10 +2,10 @@ using CleanArchitecture.Application.Behaviors;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
-using CleanArchitecture.Persistance.Data.Context;
-using CleanArchitecture.Persistance.Repositories;
-using CleanArchitecture.Persistance.Services;
+using CleanArchitecture.Infrastructure.Persistance.Data.Context;
+using CleanArchitecture.Infrastructure.Persistance.Repositories;
 using CleanArchitecture.WebApi.Middleware;
+using CleanArcihtecture.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +38,6 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// Controllers ekleniyor
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(CleanArchitecture.Presentation.AssemblyReferance).Assembly);
 
 // MediatR ve FluentValidation pipeline davranýþý
 builder.Services.AddMediatR(crf =>
@@ -62,13 +59,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Exception middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
-// Authentication ve Authorization
-app.UseAuthentication();  // Authentication eklendi
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

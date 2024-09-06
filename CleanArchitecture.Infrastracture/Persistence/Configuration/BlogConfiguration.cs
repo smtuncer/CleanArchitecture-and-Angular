@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchitecture.Persistance.Configuration;
+namespace CleanArcihtecture.Infrastructure.Persistence.Configuration;
 
 public sealed class BlogConfiguration : IEntityTypeConfiguration<Blog>
 {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CleanArchitecture.Persistance.Migrations;
+namespace CleanArchitecture.Infrastructure.Persistance.Migrations;
 
 /// <inheritdoc />
 public partial class mig1 : Migration

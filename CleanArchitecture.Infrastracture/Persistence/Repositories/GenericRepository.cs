@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace CleanArchitecture.Persistance.Repositories;
+namespace CleanArchitecture.Infrastructure.Persistance.Repositories;
 public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> where TEntity : class where TContext : DbContext
 {
     private readonly TContext _context;

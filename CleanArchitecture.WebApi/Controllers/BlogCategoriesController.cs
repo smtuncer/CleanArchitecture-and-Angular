@@ -2,11 +2,11 @@
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.CreateBlogCategory;
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Queries.GetAllBlogCategory;
 using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Presentation.Abstraction;
+using CleanArchitecture.WebApi.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CleanArchitecture.Presentation.Controllers;
+namespace CleanArchitecture.WebApi.Controllers;
 
 public sealed class BlogCategoriesController : ApiController
 {

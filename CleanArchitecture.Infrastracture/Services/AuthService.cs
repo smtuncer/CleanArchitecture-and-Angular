@@ -8,17 +8,20 @@ using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Persistance.Services;
+namespace CleanArcihtecture.Infrastructure.Services;
+
 
 public sealed class AuthService : IAuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
+    private readonly IMailService _mailService;
     private readonly IJwtProvider _jwtProvider;
-    public AuthService(UserManager<User> userManager, IMapper mapper, IJwtProvider jwtProvider)
+    public AuthService(UserManager<User> userManager, IMapper mapper, IMailService mailService, IJwtProvider jwtProvider)
     {
         _userManager = userManager;
         _mapper = mapper;
+        _mailService = mailService;
         _jwtProvider = jwtProvider;
     }
 
@@ -59,7 +62,7 @@ public sealed class AuthService : IAuthService
         
     }
 
-    public async Task RegisterAsync(RegisterCommand request)
+    public async Task RegisterAsync(RegisterCommand request, CancellationToken cancellationToken)
     {
         User user = _mapper.Map<User>(request);
         IdentityResult result = await _userManager.CreateAsync(user,request.Password);
@@ -72,6 +75,6 @@ public sealed class AuthService : IAuthService
         emails.Add(request.Email);
         string body = "";
 
-        //await _mailService.SendMailAsync(emails, "Mail Onayı", body);
+       await _mailService.SendMailAsync(emails, "Mail Onayı", body);
     }
 }

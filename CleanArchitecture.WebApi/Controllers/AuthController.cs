@@ -1,12 +1,13 @@
 ﻿using CleanArchitecture.Application.Dtos;
+using CleanArchitecture.Application.Features.AuthFeatures.Commands.CreateNewTokenByRefreshToken;
 using CleanArchitecture.Application.Features.AuthFeatures.Commands.Login;
 using CleanArchitecture.Application.Features.AuthFeatures.Commands.Register;
-using CleanArchitecture.Presentation.Abstraction;
+using CleanArchitecture.WebApi.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CleanArchitecture.Presentation.Controllers;
+namespace CleanArchitecture.WebApi.Controllers;
 
 public sealed class AuthController:ApiController
 {
@@ -20,10 +21,17 @@ public sealed class AuthController:ApiController
         MessageResponse response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
-
-    [HttpPost]
+    
+    [HttpPost("[action]")]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginCommand request, CancellationToken cancellationToken)
+    {
+        LoginCommandResponse response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> CreateTokenByRefreshToken(CreateNewTokenByRefreshTokenCommand request, CancellationToken cancellationToken)
     {
         LoginCommandResponse response = await _mediator.Send(request, cancellationToken);
         return Ok(response);

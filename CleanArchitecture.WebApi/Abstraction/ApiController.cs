@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-namespace CleanArchitecture.Presentation.Abstraction;
+ 
+namespace CleanArchitecture.WebApi.Abstraction;
 
 [ApiController]
 [Route("api/[controller]")]

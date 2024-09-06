@@ -1,17 +1,21 @@
 ﻿using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Persistance.Data.Context;
 using CleanArchitecture.WebApi.Middeware;
 using FluentValidation;
+using System.Threading;
 
 namespace CleanArchitecture.WebApi.Middleware;
 
 public sealed class ExceptionMiddleware : IMiddleware
 {
     private readonly AppDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ExceptionMiddleware(AppDbContext context)
+    public ExceptionMiddleware(AppDbContext context, IUnitOfWork unitOfWork)
     {
         _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -59,7 +63,22 @@ public sealed class ExceptionMiddleware : IMiddleware
             Timestamp = DateTime.Now,
         };
 
-        await _context.Set<ErrorLog>().AddAsync(errorLog, default);
-        await _context.SaveChangesAsync(default);
+
+        await using var transaction = await _unitOfWork.BeginTransactionAsync();
+
+        try
+        {
+
+            await _unitOfWork.Repository<ErrorLog>().AddAsync(errorLog, default);
+
+            await _unitOfWork.SaveChangesAsync(default);
+
+            await _unitOfWork.CommitTransactionAsync(default);
+        }
+        catch (Exception)
+        {
+            await _unitOfWork.RollbackTransactionAsync(default);
+            throw;
+        }
     }
 }

@@ -3,8 +3,8 @@ using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-namespace CleanArchitecture.Persistance.Data.Context;
+ 
+namespace CleanArchitecture.Infrastructure.Persistance.Data.Context;
 
 public sealed class AppDbContext : IdentityDbContext<
     User,
