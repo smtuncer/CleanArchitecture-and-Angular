@@ -1,15 +1,7 @@
-﻿using CleanArchitecture.Domain.Abstractions;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace CleanArchitecture.Domain.Entities;
 
-public sealed class UserRole : Entity
+public sealed class UserRole : IdentityUserRole<Guid>
 {
-    [ForeignKey("User")]
-    public string UserId { get; set; }
-    public User User { get; set; }
-
-    [ForeignKey("Role")]
-    public string RoleId { get; set; }
-    public Role Role { get; set; }
 }

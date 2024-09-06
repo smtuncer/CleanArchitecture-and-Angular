@@ -2,10 +2,7 @@
 
 namespace CleanArchitecture.Domain.Entities;
 
-public sealed class Role : IdentityRole<string>
+public sealed class Role : IdentityRole<Guid>
 {
-    public Role()
-    {
-        Id = Guid.NewGuid().ToString();
-    }
 }
+

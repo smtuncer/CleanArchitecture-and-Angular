@@ -1,5 +1,5 @@
-﻿using CleanArchitecture.Application.Services;
-using CleanArchitecture.Domain.Dtos;
+﻿using CleanArchitecture.Application.Dtos;
+using CleanArchitecture.Application.Services;
 using MediatR;
 
 namespace CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.CreateBlogCategory;

@@ -1,3 +1,3 @@
-﻿namespace CleanArchitecture.Domain.Dtos;
+﻿namespace CleanArchitecture.Application.Dtos;
 public sealed record MessageResponse(
     string Message);

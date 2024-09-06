@@ -2,14 +2,11 @@
 
 namespace CleanArchitecture.Domain.Entities;
 
-public sealed class User : IdentityUser<string>
+public sealed class User : IdentityUser<Guid>
 {
-    public User()
-    {
-        Id = Guid.NewGuid().ToString();
-    }
-
-    public string NameLastName { get; set; }
-    public string RefreshToken { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string FullName => string.Join("", FirstName, " ", LastName);
+    public string RefreshToken { get; set; } = string.Empty;
     public DateTime? RefreshTokenExpires { get; set; }
 }

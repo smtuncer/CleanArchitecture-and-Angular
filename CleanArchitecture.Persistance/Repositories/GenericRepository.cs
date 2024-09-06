@@ -74,6 +74,20 @@ public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity> 
         return await _entity.AsNoTracking().FirstOrDefaultAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
 
+    // GetPagedAsync sayfalama sonucunu bir liste olarak döndürüyor
+    public async Task<List<TEntity>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        var query = _entity.AsQueryable();
+
+        // Sayfalama işlemi
+        var pagedData = await query.Skip((pageNumber - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .AsNoTracking()
+                                   .ToListAsync(cancellationToken);
+
+        return pagedData;
+    }
+
     public IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> expression)
     {
         return _entity.AsNoTracking().Where(expression).AsQueryable();

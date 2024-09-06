@@ -10,5 +10,6 @@ public sealed class BlogCategoryConfiguration : IEntityTypeConfiguration<BlogCat
     {
         builder.ToTable("BlogCategories");
         builder.HasKey(p => p.Id);
+        builder.HasIndex(x => x.CategoryName);
     }
 }
