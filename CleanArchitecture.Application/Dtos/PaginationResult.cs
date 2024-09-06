@@ -14,12 +14,10 @@ public class PaginationResult<TEntity>
 
     public bool IsLastPage { get; set; }
 
-    // Parametresiz yapıcı
     public PaginationResult()
     {
     }
 
-    // Parametreli yapıcı
     public PaginationResult(IList<TEntity> datas, int pageNumber, int pageSize, int totalCount)
     {
         Datas = datas;

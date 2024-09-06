@@ -34,9 +34,8 @@ public sealed class BlogCategoryService : IBlogCategoryService
         }
         catch (Exception)
         {
-            // Bir hata oluşursa transaction'ı rollback yapıyoruz
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            throw;  // Hata tekrar fırlatılır, üst katmanda yakalanabilir
+            throw;  
         }
     }
 

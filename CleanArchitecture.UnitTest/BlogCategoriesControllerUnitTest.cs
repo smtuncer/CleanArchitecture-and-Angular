@@ -16,7 +16,7 @@ public class BlogCategoriesControllerUnitTest
         CreateBlogCategoryCommand createBlogCategoryCommand = new(
             "", "Kategori Adý", "Açýklama", false);
 
-        MessageResponse response = new("Blog Kategorisi baþarýyla kaydedildi!");
+        MessageResponse response = new("Kategori eklendi");
         CancellationToken cancellationToken = new();
 
         mediatorMock.Setup(m => m.Send(createBlogCategoryCommand, cancellationToken))
