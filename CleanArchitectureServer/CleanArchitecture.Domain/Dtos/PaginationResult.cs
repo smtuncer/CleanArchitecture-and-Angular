@@ -13,6 +13,7 @@ public class PaginationResult<TEntity>
     public bool IsFirstPage { get; set; }
 
     public bool IsLastPage { get; set; }
+    public string Search { get; set; }
 
     public PaginationResult()
     {
@@ -26,5 +27,6 @@ public class PaginationResult<TEntity>
         TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
         IsFirstPage = PageNumber == 1;
         IsLastPage = PageNumber == TotalPages;
+        Search = Search;
     }
 }

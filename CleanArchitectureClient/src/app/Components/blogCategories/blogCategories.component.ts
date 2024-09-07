@@ -1,30 +1,27 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpService } from '../../services/http.service';
-import { DoctorModel } from '../../models/doctor.model';
 import { CommonModule } from '@angular/common';
-import { departments } from '../../constants';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FormValidateDirective } from 'form-validate-angular';
 import { SwalService } from '../../services/swal.service';
-import { DoctorPipe } from '../../pipe/doctor.pipe';
+import { BlogCategoriesModel } from '../../models/blogCategories.model';
 
 @Component({
-  selector: 'app-doctors',
+  selector: 'app-blogCategories',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, FormValidateDirective, DoctorPipe],
-  templateUrl: './doctors.component.html',
-  styleUrl: './doctors.component.css'
+  imports: [CommonModule, RouterLink, FormsModule, FormValidateDirective],
+  templateUrl: './blogCategories.component.html',
+  styleUrl: './blogCategories.component.css'
 })
-export class DoctorsComponent implements OnInit {
-  doctors: DoctorModel[] = [];
-  departments = departments;
-
+export class blogCategoriesComponent implements OnInit {
+  blogCategories: BlogCategoriesModel[] = [];
+  
   @ViewChild("addModalCloseBtn") addModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild("updateModalCloseBtn") updateModalCloseBtn: ElementRef<HTMLButtonElement> | undefined;
 
-  createModel: DoctorModel = new DoctorModel();
-  updateModel: DoctorModel = new DoctorModel();
+  createModel: BlogCategoriesModel = new BlogCategoriesModel();
+  updateModel: BlogCategoriesModel = new BlogCategoriesModel();
 
   search: string = "";
 
@@ -37,40 +34,41 @@ export class DoctorsComponent implements OnInit {
     this.getAll();
   }
 
-  getAll() {
-    this.http.post<DoctorModel[]>("Doctors/GetAll", {}, (res) => {
-      this.doctors = res.data;
+
+  getAll(PageNumber: number = 1, PageSize: number = 100, Search: string = "") {
+    this.http.post<BlogCategoriesModel[]>("BlogCategories/GetAll", { PageNumber, PageSize, Search }, (res) => {
+      this.blogCategories = res.data;
     });
   }
-
+  
+  
   add(form: NgForm) {
     if (form.valid) {
-      this.http.post<string>("Doctors/Create", this.createModel, (res) => {
+      this.http.post<string>("BlogCategories/Create", this.createModel, (res) => {
         this.swal.callToast(res.data, "success");
         this.getAll();
         this.addModalCloseBtn?.nativeElement.click();
-        this.createModel = new DoctorModel();
+        this.createModel = new BlogCategoriesModel();
       });
     }
   }
 
-  delete(id: string, fullName: string) {
-    this.swal.callSwal("Doktoru Sil!", `Doktor ${fullName} silinsin mi?`, () => {
-      this.http.post<string>("Doctors/DeleteById", { id: id }, (res) => {
+  delete(id: string, categoryName: string) {
+    this.swal.callSwal("Kategoriyi Sil!", `Kategori ${categoryName} silinsin mi?`, () => {
+      this.http.post<string>("BlogCategories/DeleteById", { id: id }, (res) => {
         this.swal.callToast(res.data, "info");
         this.getAll();
       })
     })
   }
 
-  get(data: DoctorModel) {
+  get(data: BlogCategoriesModel) {
     this.updateModel = { ...data };
-    this.updateModel.departmentValue = data.department.value;
   }
 
   update(form: NgForm) {
     if (form.valid) {
-      this.http.post<string>("Doctors/Update", this.updateModel, (res) => {
+      this.http.post<string>("BlogCategories/Update", this.updateModel, (res) => {
         this.swal.callToast(res.data, "success");
         this.getAll();
         this.updateModalCloseBtn?.nativeElement.click();

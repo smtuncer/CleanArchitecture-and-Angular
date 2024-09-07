@@ -1,4 +1,6 @@
 ﻿using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.CreateBlogCategory;
+using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.DeleteBlogCategoryById;
+using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.UpdateBlogCategory;
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Queries.GetAllBlogCategory;
 using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Domain.Entities;
@@ -17,12 +19,25 @@ public sealed class BlogCategoriesController : ApiController
     {
         var response = await _mediator.Send(request, cancellationToken);
         return StatusCode(response.StatusCode, response);
-    }
+    } 
     [HttpPost]
     public async Task<IActionResult> GetAll(GetAllBlogCategoryQuery request, CancellationToken cancellationToken)
     {
-        PaginationResult<BlogCategory> response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+        var response = await _mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(UpdateBlogCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteById(DeleteBlogCategoryCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        return StatusCode(response.StatusCode, response);
     }
 
 

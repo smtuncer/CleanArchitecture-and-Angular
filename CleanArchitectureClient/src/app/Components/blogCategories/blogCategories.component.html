@@ -1,0 +1,184 @@
+<div class="mt-3 d-flex justify-content-between align-items-center">
+    <h3>Blog Kategorileri</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" routerLink="/"><a>Anasayfa</a></li>
+            <li class="breadcrumb-item active">Blog Kategorileri</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="mt-3">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8 col-md-6 col-sm-12 col-12">
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <i class="fa-solid fa-plus me-1"></i>
+                    <span>Blog Kategorisi Ekle</span>
+                </button>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12 position-relative">
+                <input type="search" class="form-control" [(ngModel)]="search" placeholder="Kategori Ara...">
+                <i class="fa-solid fa-magnifying-glass search"></i>
+            </div>
+        </div>
+    </div>
+    <div class="form-group mt-1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Oluşturulma Tarihi</th>
+                    <th>Kategori Resmi</th>
+                    <th>Kategori Adı</th>
+                    <th>Kategori Açıklaması</th>
+                    <th>Son Güncellenme Tarihi</th>
+                    <th class="text-center"><i class="fa-solid fa-eye"></i></th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for (blogCategory of blogCategories ; track blogCategory)
+                {
+                <tr>
+                    <td>{{$index +1 }}</td>
+                    <td>{{blogCategory.createdDate| date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{blogCategory.blogCategoryImageUrl}}</td>
+                    <td>{{blogCategory.categoryName}}
+                    </td>
+                    <td>{{blogCategory.categoryDescription}}</td>
+                    <td>{{blogCategory.updatedDate| date: 'dd/MM/yyyy HH:mm'}}</td>
+                    <td class="text-center" [innerHTML]="blogCategory.isPublished 
+                        ? '<i class=\'fa-solid fa-circle-check text-success\'></i>' 
+                        : '<i class=\'fa-solid fa-circle-xmark text-danger\'></i>'">
+                    </td>
+                    <td>
+                        <button (click)="get(blogCategory)" data-bs-toggle="modal" data-bs-target="#updateModal"
+                            class="btn btn-sm btn-outline-primary me-1" title="Güncelle">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button (click)="delete(blogCategory.id, blogCategory.categoryName)"
+                            class="btn btn-sm btn-outline-danger" title="Silme">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Kategori Ekle</h1>
+                <button type="button" #addModalCloseBtn class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <form #addForm="ngForm" formValidate autocomplete="off" (ngSubmit)="add(addForm)"
+                enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Kategori Başlığı</label>
+                        <input type="text" [(ngModel)]="createModel.categoryName" name="categoryName"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <label>Kategori Açıklaması</label>
+                        <input type="text" [(ngModel)]="createModel.categoryDescription" name="categoryDescription"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <div class="form-check">
+                            <input class="form-check-input" [(ngModel)]="createModel.isPublished" name="isPublished"
+                                type="checkbox" value="" id="flexCheckChecked" checked>
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Yayınlansın mı?
+                            </label>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <label>Kategori Resmi</label>
+                        <input type="text" [(ngModel)]="createModel.blogCategoryImageUrl" name="blogCategoryImageUrl"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark w-100">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Kategori Güncelle</h1>
+                <button type="button" #updateModalCloseBtn class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <form #updateForm="ngForm" formValidate autocomplete="off" (ngSubmit)="update(updateForm)"
+                enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Kategori Başlığı</label>
+                        <input type="text" [(ngModel)]="updateModel.categoryName" name="categoryName"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <label>Kategori Açıklaması</label>
+                        <input type="text" [(ngModel)]="updateModel.categoryDescription" name="categoryDescription"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <div class="form-check">
+                            <input class="form-check-input" [(ngModel)]="updateModel.isPublished" name="isPublished"
+                                type="checkbox" value="" id="flexCheckCheckedd" checked>
+                            <label class="form-check-label" for="flexCheckCheckedd">
+                                Yayınlansın mı?
+                            </label>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group mt-1">
+                        <label>Kategori Resmi</label>
+                        <input type="text" [(ngModel)]="updateModel.blogCategoryImageUrl" name="blogCategoryImageUrl"
+                            class="form-control" required minlength="3">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary w-100">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -27,6 +27,7 @@ public sealed class CreateBlogCategoryCommandHandler(
         catch (Exception)
         {
             await unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result<string>.Failure("Kategori eklenirken hata oluştu");
             throw;
         }
     }

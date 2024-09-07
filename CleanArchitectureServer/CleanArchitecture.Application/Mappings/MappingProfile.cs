@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.CreateBlogCategory;
+using CleanArchitecture.Application.Features.BlogCategoryFeatures.Commands.UpdateBlogCategory;
 using CleanArchitecture.Application.Features.BlogCategoryFeatures.Queries.GetAllBlogCategory;
 using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Domain.Entities;
@@ -11,6 +12,7 @@ public sealed class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<CreateBlogCategoryCommand, BlogCategory>().ReverseMap();
+        CreateMap<UpdateBlogCategoryCommand, BlogCategory>().ReverseMap();
         CreateMap<GetAllBlogCategoryQuery, IList<BlogCategory>>().ReverseMap();
         CreateMap<List<BlogCategory>, PaginationResult<BlogCategory>>()
              .ForMember(dest => dest.Datas, opt => opt.MapFrom(src => src))
