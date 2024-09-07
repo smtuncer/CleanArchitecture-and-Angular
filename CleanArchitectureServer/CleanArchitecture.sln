@@ -21,9 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2DA80CA0-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.UnitTest", "CleanArchitecture.UnitTest\CleanArchitecture.UnitTest.csproj", "{B4B97E4D-4AE1-4D66-BF5C-4354D0577BA1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureClient", "CleanArchitectureClient", "{3A05E0B7-96AF-418D-AA93-2CFFCB45DDFC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureServer", "CleanArchitectureServer", "{3A05E0B7-96AF-418D-AA93-2CFFCB45DDFC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureServer", "CleanArchitectureServer", "{A06E19F0-F582-4AE9-9E2F-CC9CC69BCE3F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureClient", "CleanArchitectureClient", "{A06E19F0-F582-4AE9-9E2F-CC9CC69BCE3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
