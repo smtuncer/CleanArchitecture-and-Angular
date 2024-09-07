@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CleanArchitectureClient": {
+    "eAppointmentClient": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -38,7 +38,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/clean-architecture-client",
+            "outputPath": "dist/e-appointment-client",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -84,10 +84,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "CleanArchitectureClient:build:production"
+              "buildTarget": "eAppointmentClient:build:production"
             },
             "development": {
-              "buildTarget": "CleanArchitectureClient:build:development"
+              "buildTarget": "eAppointmentClient:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -117,5 +117,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "b3ad8eaa-f2e1-4a28-a5b6-17ded332fc24"
   }
 }
