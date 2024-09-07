@@ -1,3 +1,4 @@
+using CleanArchitecture.Application;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Infrastracture.Data.Context;
 using CleanArchitecture.Infrastructure;
@@ -7,25 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructure(builder.Configuration);
-// Veritabaný baðlantýsý
-string connectionString = builder.Configuration.GetConnectionString("SqlServer");
-builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(connectionString));
-
-// Identity ve DbContext ayarlarý
-builder.Services.AddIdentity<User, Role>(action =>
+builder.Services.AddCors(options =>
 {
-    action.Password.RequiredLength = 1;
-    action.Password.RequireUppercase = false;
-    action.Password.RequireLowercase = false;
-    action.Password.RequireNonAlphanumeric = false;
-    action.Password.RequireDigit = false;
-}).AddEntityFrameworkStores<AppDbContext>();
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
-// Middleware ve exception handling
+builder.Services.AddApplication();
+
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -41,9 +40,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors();
-
-app.UseAuthentication();
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 

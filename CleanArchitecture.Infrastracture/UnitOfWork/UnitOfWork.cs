@@ -22,14 +22,12 @@ public class UnitOfWork : IUnitOfWork
     {
         var entityType = typeof(TEntity);
 
-        // Eğer repository cache'te yoksa yeni bir repository oluştur ve cache'e ekle
         if (!_repositories.ContainsKey(entityType))
         {
             var repositoryInstance = new GenericRepository<TEntity, AppDbContext>(_context);
             _repositories.TryAdd(entityType, repositoryInstance);
         }
 
-        // Cache'teki repository'yi döndür
         return (IGenericRepository<TEntity>)_repositories[entityType];
     }
 
