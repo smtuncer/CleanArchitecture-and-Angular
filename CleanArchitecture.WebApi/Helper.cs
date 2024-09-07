@@ -7,7 +7,6 @@ public static class Helper
 {
     public static async Task CreateUserAsync(WebApplication app)
     {
-        //Hiç kullanıcı yoksa kullanıcı oluşturur
         using (var scoped = app.Services.CreateScope())
         {
             var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<User>>();

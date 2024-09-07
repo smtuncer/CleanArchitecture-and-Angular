@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace CleanArchitecture.Infrastracture.Authenticaton;
+namespace CleanArchitecture.Infrastracture.Services;
 
 internal sealed class JwtProvider(
     IConfiguration configuration,

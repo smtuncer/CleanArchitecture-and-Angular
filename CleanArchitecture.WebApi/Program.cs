@@ -16,10 +16,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddApplication();
-
 builder.Services.AddTransient<ExceptionMiddleware>();
-
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

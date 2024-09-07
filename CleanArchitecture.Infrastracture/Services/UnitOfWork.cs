@@ -5,7 +5,7 @@ using CleanArchitecture.Infrastracture.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Collections.Concurrent;
 
-namespace CleanArchitecture.Infrastracture.UnitOfWork;
+namespace CleanArchitecture.Infrastracture.Services;
 
 public class UnitOfWork : IUnitOfWork
 {

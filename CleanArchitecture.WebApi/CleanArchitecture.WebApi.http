@@ -1,6 +1,11 @@
-@CleanArchitecture.WebApi_HostAddress = http://localhost:5068
 
-GET {{CleanArchitecture.WebApi_HostAddress}}/weatherforecast/
+@CleanArchitecture.WebApi_HostAddress = http://localhost:5094
+
+GET http://localhost:5094/api/Auth/Login
 Accept: application/json
+Content-Type: application/json
+{
+  "userNameOrEmail":"string",
+  "password":"string"
+}
 
-###
