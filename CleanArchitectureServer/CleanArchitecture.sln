@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.UnitTest"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureClient", "CleanArchitectureClient", "{3A05E0B7-96AF-418D-AA93-2CFFCB45DDFC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureServer", "CleanArchitectureServer", "{86DAE32F-3E1D-43D7-9020-46FEA77DF887}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CleanArchitectureServer", "CleanArchitectureServer", "{A06E19F0-F582-4AE9-9E2F-CC9CC69BCE3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
