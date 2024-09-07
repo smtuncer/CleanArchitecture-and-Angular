@@ -1,10 +1,7 @@
 using CleanArchitecture.Application;
-using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Infrastracture.Data.Context;
 using CleanArchitecture.Infrastructure;
 using CleanArchitecture.WebApi;
 using CleanArchitecture.WebApi.Middleware;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
